@@ -53,53 +53,52 @@ public class MyThread extends Thread {
                 }
             int wordCounti = 0;
             try {
-                // Открытие файла Word
                 FileInputStream fis = new FileInputStream(new File(filePath));
                 XWPFDocument document = new XWPFDocument(fis);
 
-                // Получение списка абзацев из документа
+            
                 List<XWPFParagraph> paragraphs = document.getParagraphs();
                 Iterator<XWPFParagraph> iterator = paragraphs.iterator();
                 int i = 0;
-                // Проверка каждого абзаца
+                
                 while (iterator.hasNext()) {
                     XWPFParagraph para = iterator.next();
                     boolean skipParagraph = false;
 
-                    // Получение списка текстовых элементов (run) абзаца
+            
                     List<XWPFRun> runs = para.getRuns();
 
-                    // Проверка каждого текстового элемента (run)
+                
                     for (XWPFRun run : runs) {
                         String fontNames = run.getFontFamily();
                         int fontSizes = run.getFontSize();
-                        // Проверка соответствия шрифта и размера
+                    
                         if (fontNames == null) {
                             skipParagraph = true;
                             break;
                         }
                         if (!fontNames.equalsIgnoreCase(fontName) || fontSizes != fontSize) {
                             skipParagraph = true;
-                            break; // Прерываем цикл, если хотя бы один элемент не соответствует
+                            break; 
                         }
                     }
 
 
-                    // Если абзац не соответствует шрифту, пропускаем его
+
                     if (skipParagraph) {
                         continue;
                     }
 
-                    // Подсчет количества слов в абзаце
+                
                     String[] words = para.getText().split("\\s+");
                     wordCount = wordCount + words.length;
 
-                    // Если количество слов в абзаце превышает лимит, пропускаем его
+                
                     if (wordCount > wordLimit) {
                         continue;
                     }
                     wordCounti = wordCount;
-                    // Печать абзаца
+        
                     finalText = finalText + para.getText() + "\n";
                 }
             } catch (FileNotFoundException e) {
@@ -120,9 +119,9 @@ public class MyThread extends Thread {
                 while (iterator.hasNext()) {
                     XWPFParagraph para = iterator.next();
 
-                    // Получение списка текстовых элементов (run) абзаца
+        
                     List<XWPFRun> runs = para.getRuns();
-                    // Проверка каждого текстового элемента (run)
+    
                     for (int i = 0; i < runs.size(); i++) {
                         XWPFRun run = runs.get(i);
                         String text = run.getText(0);
@@ -142,7 +141,7 @@ public class MyThread extends Thread {
                             }
                         }
                     }
-                    // Если достигнуто требуемое количество удаленных слов, прерываем обход документа
+                    
                     if (wordConiy >= wordCounti) {
                         break;
                     }
@@ -158,25 +157,25 @@ public class MyThread extends Thread {
 
 
             try {
-                // Укажите путь к вашему .exe файлу
+                
                 String finline = "";
                 try {
                     FileReader fr = new FileReader("response.txt");
                     BufferedReader br = new BufferedReader(fr);
 
-                    // Чтение строк из файла
+                
                     runpython();
                     String line;
 
                     while ((line = br.readLine()) != null) {
-                        // Вывод строки на экран
+                    
                         System.out.println(line);
                         finline = finline + line + "\n";
                     }
                     System.out.println(finline);
                     boolean flags = false;
                     while (flags == false) {
-                        // Если условие не выполнено, выводим сообщение об ошибке
+                    
                         if (finline.equals("当前地区当日额度已消耗完, 请尝试更换网络环境") || finline.equals("")) {
                             JOptionPane.showMessageDialog(null, "Ошибка: Смените VPN!");
                         } else {
@@ -186,35 +185,35 @@ public class MyThread extends Thread {
                         finline = "";
                         runpython();
                         while ((line = br.readLine()) != null) {
-                            // Вывод строки на экран
+                        
                             System.out.println(line);
                             finline = finline + line + "\n";
                         }
                     }
                     ////////////////////////
-                    // Создаем новый документ
+                
                     XWPFDocument document = new XWPFDocument();
 
-                    // Создаем параграф
+                    
                     XWPFParagraph paragraph = document.createParagraph();
 
-                    // Создаем объект для работы с текстом в параграфе
+            
                     XWPFRun run = paragraph.createRun();
 
-                    // Задаем текст, который хотим записать в документ
+                
 
-                    // Устанавливаем текст в объекте run
+            
                     run.setText(finline);
 
-                    // Указываем путь к файлу, в который будем записывать документ
+            
                     String filePath = "parsed_text.docx";
 
                     try {
-                        // Создаем поток для записи в файл
+                 
                         FileOutputStream out = new FileOutputStream(filePath);
-                        // Записываем содержимое документа в файл
+                    
                         document.write(out);
-                        // Закрываем поток
+                        
                         out.close();
                         System.out.println("Файл успешно создан: " + filePath);
                     } catch (IOException e) {
@@ -254,17 +253,17 @@ public class MyThread extends Thread {
     }
     public void saveFile(String promt, String str){
         try {
-            // Создание объекта File с указанием пути к файлу
-            File file = new File("cache.txt");
+        
+             File file= new File("cache.txt");
 
-            // Создание объектов FileWriter и BufferedWriter для записи в файл
+        
             FileWriter fw = new FileWriter(file, false);
             BufferedWriter bw = new BufferedWriter(fw);
 
-            // Запись строки в файл
+            
             bw.write(promt + str);
 
-            // Закрытие BufferedWriter и FileWriter
+    
             bw.close();
             fw.close();
 
@@ -278,7 +277,7 @@ public class MyThread extends Thread {
             StringBuilder sb = new StringBuilder();
             String line;
 
-            // Чтение файла и удаление пустых строк
+        
             while ((line = reader.readLine()) != null) {
                 if (!line.trim().isEmpty()) {
                     sb.append(line).append("\n");
@@ -286,7 +285,7 @@ public class MyThread extends Thread {
             }
             reader.close();
 
-            // Запись обновленного текста обратно в файл
+        
             BufferedWriter writer = new BufferedWriter(new FileWriter("cache.txt"));
             writer.write(sb.toString());
             writer.close();
@@ -300,17 +299,17 @@ public class MyThread extends Thread {
     public void runpython() throws IOException, InterruptedException {
         String command = "prog.exe";
 
-        // Запустить процесс
+        
         Process process = Runtime.getRuntime().exec(command);
         InputStream inputStream = process.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         String line;
         while ((line = reader.readLine()) != null) {
-            System.out.println(line); // Выводим каждую строку на экран
+            System.out.println(line); 
         }
         int exitCode = process.waitFor();
         String finline = "";
-        // Вывести код завершения (может быть полезно для отладки)
+        //
         System.out.println("Код завершения: " + exitCode);
     }
     public static int countWords(String text) {
@@ -318,7 +317,7 @@ public class MyThread extends Thread {
             return 0;
         }
 
-        String[] words = text.split("\\s+"); // Разделение строки по пробелам
+        String[] words = text.split("\\s+"); 
         return words.length;
     }
 
